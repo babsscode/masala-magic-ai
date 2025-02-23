@@ -7,24 +7,27 @@ import { useEffect, useState, FormEvent, ChangeEvent } from 'react';
 
 const Home = () => { 
     const [foodApiData, setFoodApiData] = useState<FoodAPIType | null>(null);
+    const [loading, setLoading] = useState(true); // Loading state
     useEffect(() => {
         const apiUrl = 'https://babsscode.pythonanywhere.com/api';
 
         fetch(apiUrl)
         .then(res => res.json())
-        .then((response) => setFoodApiData(response))
+        .then((response) => {
+            setFoodApiData(response);
+            setLoading(false); // Set loading to false after data is fetched
+        })
         .catch(error => console.error('API Fetch Error:', error));
     }, []);
   
 
   useEffect(() => {
     // You can perform any additional logic when apiData changes
-    console.log('API Data updated:', foodApiData);
   }, [foodApiData]);
 
   // useState for handling the input value (phrase)
   const [inputPhrase, setInputPhrase] = useState('fun and easy snacks for kids');
-  const [inputOffSet, setInputOffSet] = useState(10);
+  const [inputOffSet, setInputOffSet] = useState(10);  
 
   //---------------------------------------
  // Function to handle form submission
@@ -35,6 +38,8 @@ const Home = () => {
         phrase: inputPhrase,
         offset: inputOffSet,
     };
+
+    setLoading(true);
 
     try {
         const response = await fetch('https://babsscode.pythonanywhere.com/api', {
@@ -50,11 +55,13 @@ const Home = () => {
         }
 
         const result = await response.json();
-        console.log(result); // Log the response from the backend
 
         setFoodApiData(result);
     } catch (error) {
         console.error('Error:', error);
+    }
+    finally {
+        setLoading(false); 
     }
 };
 
@@ -153,6 +160,13 @@ const handleRandChangeTwo = async (event: FormEvent) => {
                    </button>
                </motion.div>
                */}
+               {/* Conditionally show loading spinner */}
+                {loading && (
+                <div className="mb-6 flex justify-center items-center space-x-2">
+                <div className="w-6 h-6 border-4 border-t-4 border-blue-500 rounded-full animate-spin"></div>
+                <span>Loading...</span>
+                </div>
+                )}
                {/* other cards */}
                <div className='flex flex-row flex-wrap justify-center gap-[3rem]'>
                {foodApiData &&
