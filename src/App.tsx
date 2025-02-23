@@ -5,7 +5,7 @@ import { getAnalytics, logEvent } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
+/**const firebaseConfig = {
   apiKey: "AIzaSyD7nNWOeyQERqWfHFiMUTZp-27tW5sikqc",
   authDomain: "foody-ai.firebaseapp.com",
   projectId: "foody-ai",
@@ -13,6 +13,18 @@ const firebaseConfig = {
   messagingSenderId: "1026638607928",
   appId: "1:1026638607928:web:ae7e7c85b87c4d5dfad8cd",
   measurementId: "G-C02LKJ67YW"
+}; */
+
+//CHANGED
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDb2SkwulpkMPgV7htwEvdUXNCb6D9zN7c",
+  authDomain: "masalamagicai.firebaseapp.com",
+  projectId: "masalamagicai",
+  storageBucket: "masalamagicai.firebasestorage.app",
+  messagingSenderId: "342497033993",
+  appId: "1:342497033993:web:ee37712e018b734b6c1dd8",
+  measurementId: "G-Q1S60SQDWF"
 };
 
 // Initialize Firebase
@@ -44,7 +56,7 @@ function App() {
   }, []);
   */
   return (
-    <div className="app bg-mysecondary-300">
+    <div className="app">
       <Home />
     </div>
   );

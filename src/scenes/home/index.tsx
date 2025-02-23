@@ -7,22 +7,24 @@ import { useEffect, useState, FormEvent, ChangeEvent } from 'react';
 
 const Home = () => { 
     const [foodApiData, setFoodApiData] = useState<FoodAPIType | null>(null);
+    useEffect(() => {
+        const apiUrl = 'https://babsscode.pythonanywhere.com/api';
 
-  useEffect(() => {
-    const apiUrl = 'https://babsscode.pythonanywhere.com/api';
+        fetch(apiUrl)
+        .then(res => res.json())
+        .then((response) => setFoodApiData(response))
+        .catch(error => console.error('API Fetch Error:', error));
+    }, []);
+  
 
-    fetch(apiUrl)
-      .then(res => res.json())
-      .then((response) => setFoodApiData(response))
-      .catch(error => console.error('API Fetch Error:', error));
-  }, []);
   useEffect(() => {
     // You can perform any additional logic when apiData changes
     console.log('API Data updated:', foodApiData);
   }, [foodApiData]);
 
   // useState for handling the input value (phrase)
-  const [inputPhrase, setInputPhrase] = useState('');
+  const [inputPhrase, setInputPhrase] = useState('fun and easy snacks for kids');
+  const [inputOffSet, setInputOffSet] = useState(10);
 
   //---------------------------------------
  // Function to handle form submission
@@ -31,6 +33,7 @@ const Home = () => {
 
     const data = {
         phrase: inputPhrase,
+        offset: inputOffSet,
     };
 
     try {
@@ -56,26 +59,53 @@ const Home = () => {
 };
 
   // Function to handle input value change
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputPhrase(event.target.value);
+    setInputOffSet(10);
 };
 
+const handleOffsetChange = () => {
+    setInputOffSet((prevOffset) => prevOffset + 10);
+}
+const handleRandChange = () => {
+    setInputPhrase('random')
+}
+{/*
+const handleRandChangeTwo = async (event: FormEvent) => {
+    event.preventDefault();
+
+    try {
+        const apiUrl = 'https://babsscode.pythonanywhere.com/random';
+  
+        const response = await fetch(apiUrl);
+  
+        if (!response.ok) {
+          throw new Error('Failed to fetch data from the backend');
+        }
+  
+        const responseData = await response.json();
+        setFoodApiData(responseData);
+      } catch (error) {
+        console.error('API Fetch Error:', error);
+      }
+};
+*/}
 
   return <section
        id="home"
-       className="gap-16 bg-mysecondary-300 py-10 md:h-[800px] w-full md:pb-0"
+       className="gap-16 py-10 md:h-[800px] w-full md:pb-0 text-black"
    >
        {/* main headers and search bar*/}
        <motion.div
-       className='mx-auto w-5/6 items-center justify-center md:h-5/6'
+       className='mx-auto w-5/6 items-center justify-center  md:h-5/6'
        >
            <div className='mt-6 md:mb-0 md:basis-3/8'>
-               {/* main heading */}
-               <p className='text-[2.5rem] md:text-[5.5rem] text-center leading-[4rem] md:leading-[6rem]'>don't know what to make for your next meal?</p>
+               {/* main heading Struggling with Meal Ideas? Just Ask Amma.*/}
+               <p className='text-[2.5rem] md:text-[4rem] text-center leading-[4rem] md:leading-[6rem]'>Masala Magic AI</p>
                <br/>
-               {/* 2nd heading */}
-               <p className='mt-4 text-2xl md:text-4xl text-center text-myprimary-100'>
-                   ask foody, your personal ai chef
+               {/* 2nd heading Amma's Ruchi, AI's Insight.*/}
+               <p className='mt-2 md:mt-4 text-xl md:text-2xl text-center '>
+                Struggling with meal ideas? <br/>Search thourgh thousands of delicious Indian recipes using AI!
                </p>
                <br/>
                <br/>
@@ -85,9 +115,9 @@ const Home = () => {
                     <div className='flex-initial'>
                     <input 
                         id="inputFoodPrompt" 
-                        className='rounded-2xl border-2 text-center border-black focus:border-blue-400 focus:ring-0 h-[3.10rem] w-[15rem] md:w-[45rem]' 
-                        placeholder="i'm craving... "
-                        value={inputPhrase}
+                        className='placeholder-gray-500 rounded-2xl border-2 text-center border-black focus:border-blue-400 focus:ring-0 h-[3.10rem] w-[15rem] md:w-[45rem]' 
+                        placeholder="fun and easy snacks"
+                        //value={inputPhrase}
                         onChange={handleInputChange}/>
                     </div>
                    {/* send button */}
@@ -100,9 +130,21 @@ const Home = () => {
                     </div>
                    </div>
                 </form>
+                <br/>
+                <form onSubmit={handleSubmit}>
+               <div className="flex md:space-x-4 space-x-2 justify-center">
+               <button
+               type='submit' 
+               className='rounded-2xl border-[2px] border-black text-white text-md bg-myprimary-200 px-[0.8rem] py-[0.8rem] bg-black hover:bg-slate-400'
+               onClick={handleRandChange}
+               >
+                try something new!
+               </button>
+               </div>
+               </form>
                <br/>
-               <br/>
-               {/* card animation
+               {/* 
+               card animation
                <motion.div className="animatable w-[20rem] h-[15rem] rounded-2xl border-2 text-center border-black bg-white"
                whileHover={{ scale: 1.1 }}
                whileTap={{ scale: 0.9 }}>
@@ -114,10 +156,25 @@ const Home = () => {
                {/* other cards */}
                <div className='flex flex-row flex-wrap justify-center gap-[3rem]'>
                {foodApiData &&
-                    Object.entries(foodApiData).map(([name, data]) => (
-                    <FoodCard foodAPIwKey={{ name, data }} />
+                    Object.entries(foodApiData)
+                    .sort(([, dataA], [, dataB]) => dataA.id - dataB.id)
+                    .map(([name, data]) => (
+                    <FoodCard  key={name} foodAPIwKey={{ name, data }} />
                 ))}
                </div>
+               <br/>
+               <br/>
+                <form onSubmit={handleSubmit}>
+               <div className="flex md:space-x-4 space-x-2 justify-center">
+               <button
+               type='submit' 
+               className='rounded-2xl border-[2px] border-black text-white text-md bg-myprimary-200 px-[0.8rem] py-[0.8rem] bg-black hover:bg-slate-400'
+               onClick={handleOffsetChange}
+               >
+                load more
+               </button>
+               </div>
+               </form>
                <br/>
                <br/>
            </div>

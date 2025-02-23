@@ -1,7 +1,8 @@
 {
   "projects": {
-    "default": "ammaruchiai"
-    },
+    "default": "ammaruchiai",
+    "masalaMagicAI": "masalamagicai"
+  },
   "targets": {},
   "etags": {}
 }
