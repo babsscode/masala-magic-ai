@@ -20,8 +20,8 @@ function FoodCard({ foodAPIwKey }: Props) {
               key={foodAPIwKey.data.id}
               layoutId={(foodAPIwKey.data.id).toString()}
               onClick={handleClick}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
         >
           <motion.h2 className='break-words'>{foodAPIwKey.name}</motion.h2>
           <br/>

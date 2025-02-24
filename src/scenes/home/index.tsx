@@ -8,6 +8,8 @@ import { useEffect, useState, FormEvent, ChangeEvent } from 'react';
 const Home = () => { 
     const [foodApiData, setFoodApiData] = useState<FoodAPIType | null>(null);
     const [loading, setLoading] = useState(true); // Loading state
+    const [loading2, setLoading2] = useState(false); // Loading state
+
     useEffect(() => {
         const apiUrl = 'https://babsscode.pythonanywhere.com/api';
 
@@ -25,8 +27,8 @@ const Home = () => {
     // You can perform any additional logic when apiData changes
   }, [foodApiData]);
 
-  // useState for handling the input value (phrase)
-  const [inputPhrase, setInputPhrase] = useState('fun and easy snacks for kids');
+  // useState for handling the input value (phrase) fun and easy snacks
+  const [inputPhrase, setInputPhrase] = useState('fun and easy snacks');
   const [inputOffSet, setInputOffSet] = useState(10);  
 
   //---------------------------------------
@@ -62,6 +64,8 @@ const Home = () => {
     }
     finally {
         setLoading(false); 
+        console.log("done")
+        setLoading2(false);
     }
 };
 
@@ -72,6 +76,8 @@ const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 };
 
 const handleOffsetChange = () => {
+    setLoading2(true);
+    console.log("loading2")
     setInputOffSet((prevOffset) => prevOffset + 10);
 }
 const handleRandChange = () => {
@@ -147,6 +153,8 @@ const handleRandChangeTwo = async (event: FormEvent) => {
                >
                 try something new!
                </button>
+               <br/>
+               <br/>
                </div>
                </form>
                <br/>
@@ -164,7 +172,7 @@ const handleRandChangeTwo = async (event: FormEvent) => {
                 {loading && (
                 <div className="mb-6 flex justify-center items-center space-x-2">
                 <div className="w-6 h-6 border-4 border-t-4 border-blue-500 rounded-full animate-spin"></div>
-                <span>Loading...</span>
+                <span>Searching...</span>
                 </div>
                 )}
                {/* other cards */}
@@ -180,13 +188,23 @@ const handleRandChangeTwo = async (event: FormEvent) => {
                <br/>
                 <form onSubmit={handleSubmit}>
                <div className="flex md:space-x-4 space-x-2 justify-center">
-               <button
-               type='submit' 
-               className='rounded-2xl border-[2px] border-black text-white text-md bg-myprimary-200 px-[0.8rem] py-[0.8rem] bg-black hover:bg-slate-400'
-               onClick={handleOffsetChange}
-               >
-                load more
-               </button>
+                {/* Conditionally show loading spinner */}
+                {loading2 && (
+                <div className="mb-6 flex justify-center items-center space-x-2">
+                <div className="w-6 h-6 border-4 border-t-4 border-blue-500 rounded-full animate-spin"></div>                <br/>
+                <br/>
+                </div>
+                )}
+                <div className='flex'>
+                    <button
+                        type='submit' 
+                        className='rounded-2xl border-[2px] border-black text-white text-md bg-myprimary-200 px-[0.8rem] py-[0.8rem] bg-black hover:bg-slate-400'
+                        onClick={handleOffsetChange}
+                        >
+                        load more
+                    </button>
+                </div>
+               
                </div>
                </form>
                <br/>
